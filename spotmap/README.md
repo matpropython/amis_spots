@@ -8,7 +8,7 @@ SpotMap est une application web mobile-first pensée comme un réseau social gé
 - **shadcn/ui** pour les composants (Button installé)
 - **Lucide React** pour l'iconographie
 - **Mapbox GL** via `react-map-gl` (style sombre `dark-v11`)
-- **Supabase client** pré-installé pour la suite (auth + data)
+- **Supabase** (Postgres + Auth) avec `@supabase/ssr`
 - **Zustand** réservé au futur state partagé
 
 ## Démarrage
@@ -20,15 +20,24 @@ npm run dev
 Puis rends-toi sur [http://localhost:3000](http://localhost:3000).
 
 ## Variables d'environnement
-Crée un fichier `.env.local` et renseigne au minimum :
+Crée un fichier `.env.local` (inspiré de `.env.example`) avec :
 
 ```
 NEXT_PUBLIC_MAPBOX_TOKEN=pk.xxx
-SUPABASE_URL=...
-SUPABASE_ANON_KEY=...
+NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=public-anon
+SUPABASE_URL=https://xxx.supabase.co
+SUPABASE_ANON_KEY=public-anon
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
-Sans token Mapbox, l'écran carte affiche un message pédagogique.
+Sans token Mapbox, l'écran carte affiche un message pédagogique. Les clés Supabase sont nécessaires pour l'auth côté client (browser) et côté serveur (API / actions).
+
+## Auth & données
+- `types/database.types.ts` : définition stricte des tables (profiles, places, reviews, friendships).
+- `utils/supabase/*` : helpers SSR/CSR basés sur `@supabase/ssr`, cookies gérés automatiquement.
+- `components/auth/login-form.tsx` + `app/login/page.tsx` : formulaire email/mot de passe + lien magique.
+- La navigation mobile récupère le profil Supabase et affiche l'avatar connecté.
 
 ## Structure initiale
 - `app/layout.tsx` : layout global, dock mobile et FAB flottante desktop.
@@ -43,7 +52,7 @@ Sans token Mapbox, l'écran carte affiche un message pédagogique.
 - `npm run lint` : ESLint + React Compiler.
 
 ## Prochaines étapes
-1. Brancher Supabase (tables users/places/reviews/friendships) et sécuriser l'auth.
+1. Lire/écrire les données Supabase (afficher les vrais avis, créer les reviews).
 2. Intégrer Mapbox Places pour la recherche puis un drawer d'info lieu.
 3. Construire le flow complet "Ajouter un avis" (form, upload, validation).
 4. Implémenter le système d'amis (recherche, invitations, filtres sur la carte).
