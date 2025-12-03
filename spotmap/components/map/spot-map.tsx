@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import Map, { Marker, NavigationControl } from "react-map-gl";
+import Map, { Marker, NavigationControl } from "react-map-gl/mapbox";
 import { Loader2, MapPin, Sparkles } from "lucide-react";
 
 import type { Tables } from "@/types/database.types";
